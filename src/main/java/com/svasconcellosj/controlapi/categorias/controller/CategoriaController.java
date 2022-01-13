@@ -19,12 +19,13 @@ import com.svasconcellosj.controlapi.categorias.service.CategoriaService;
 
 @RestController
 @RequestMapping(value = "/categorias")
+@CrossOrigin(maxAge = 10, origins = { "http://localhost:4200"} )
 public class CategoriaController {
 
 	@Autowired
 	private CategoriaService categoriaService;
 	
-	@CrossOrigin(maxAge = 10, origins = { "http://localhost:4200"} )
+	
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<Page<CategoriaModel>> buscaCategorias(CategoriaFilter categoriaFilter, Pageable pageable) {
 		Page<CategoriaModel> cM = categoriaService.buscaTodos(categoriaFilter, pageable);
@@ -40,7 +41,7 @@ public class CategoriaController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<CategoriaModel> buscaId(@PathVariable Long id) {
 		CategoriaModel categoriaModel = categoriaService.buscaId(id);
-		return categoriaModel == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : new ResponseEntity<CategoriaModel>(categoriaModel, HttpStatus.FOUND);
+		return categoriaModel == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : new ResponseEntity<CategoriaModel>(categoriaModel, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
