@@ -24,6 +24,9 @@ public class CategoriaModel {
 	private String descricao;
 	
 	@NotNull
+	private CategoriaTipo tipo;
+	
+	@NotNull
 	private Boolean status;
 	
 
