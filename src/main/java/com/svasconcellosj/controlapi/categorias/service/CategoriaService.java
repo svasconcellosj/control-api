@@ -41,4 +41,5 @@ public class CategoriaService {
 	public void exclui(CategoriaModel categoria) {
 		categoriaRepository.delete(categoria);
 	}
+	
 }

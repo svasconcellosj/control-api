@@ -28,6 +28,5 @@ public class CategoriaModel {
 	
 	@NotNull
 	private Boolean status;
-	
 
 }
