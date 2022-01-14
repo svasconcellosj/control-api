@@ -4,16 +4,23 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.svasconcellosj.controlapi.plantas.model.PlantaModel;
 import com.svasconcellosj.controlapi.plantas.repository.PlantaRepository;
+import com.svasconcellosj.controlapi.plantas.repository.filter.PlantaFilter;
 
 @Service
 public class PlantaService {
 
 	@Autowired
 	private PlantaRepository plantaRepository;
+	
+	public Page<PlantaModel> Pesquisar(PlantaFilter plantaFilter, Pageable pageable) {
+		return plantaRepository.filtrar(plantaFilter, pageable);		
+	}
 	
 	public List<PlantaModel> buscaTodos() {
 		return plantaRepository.findAll();

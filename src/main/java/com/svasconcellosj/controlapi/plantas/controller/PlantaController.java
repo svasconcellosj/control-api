@@ -1,8 +1,8 @@
 package com.svasconcellosj.controlapi.plantas.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.svasconcellosj.controlapi.plantas.model.PlantaModel;
+import com.svasconcellosj.controlapi.plantas.repository.filter.PlantaFilter;
 import com.svasconcellosj.controlapi.plantas.service.PlantaService;
 
 @RestController
@@ -25,9 +26,9 @@ public class PlantaController {
 	private PlantaService plantaService;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<PlantaModel>> buscaPlantas() {
-		List<PlantaModel> lista = plantaService.buscaTodos();
-		return new ResponseEntity<List<PlantaModel>>(lista, HttpStatus.OK);
+	public ResponseEntity<Page<PlantaModel>> buscaPlantas(PlantaFilter plantaFilter, Pageable pageable) {
+		Page<PlantaModel> lista = plantaService.Pesquisar(plantaFilter, pageable);
+		return new ResponseEntity<Page<PlantaModel>>(lista, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
