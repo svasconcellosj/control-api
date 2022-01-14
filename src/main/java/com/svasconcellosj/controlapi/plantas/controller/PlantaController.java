@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,7 @@ import com.svasconcellosj.controlapi.plantas.service.PlantaService;
 
 @RestController
 @RequestMapping(value = "/plantas")
+@CrossOrigin(maxAge = 10, origins = "http://localhost:4200")
 public class PlantaController {
 	
 	@Autowired
@@ -28,7 +31,7 @@ public class PlantaController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<PlantaModel> gravaPlanta(@RequestBody PlantaModel planta) {
+	public ResponseEntity<PlantaModel> gravaPlanta(@Validated @RequestBody PlantaModel planta) {
 		PlantaModel plantaModel = plantaService.grava(planta);
 		return new ResponseEntity<PlantaModel>(plantaModel, HttpStatus.CREATED);
 	}
@@ -36,20 +39,20 @@ public class PlantaController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<PlantaModel> buscaPlanta(@PathVariable Long id) {
 		PlantaModel plantaModel = plantaService.buscaId(id);
-		return new ResponseEntity<PlantaModel>(plantaModel, HttpStatus.OK);
+		return plantaModel == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : new ResponseEntity<PlantaModel>(plantaModel, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	public ResponseEntity<PlantaModel> alteraPlanta(@PathVariable Long id, @RequestBody PlantaModel planta) {
 		PlantaModel plantaModel = plantaService.altera(id, planta);
-		return new ResponseEntity<PlantaModel>(plantaModel, HttpStatus.OK);
+		return plantaModel == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : new ResponseEntity<PlantaModel>(plantaModel, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<PlantaModel> excluiPlanta(@PathVariable Long id) {
 		PlantaModel plantaModel = plantaService.buscaId(id);
 		if ( plantaModel == null ) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		plantaService.exclui(plantaModel);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

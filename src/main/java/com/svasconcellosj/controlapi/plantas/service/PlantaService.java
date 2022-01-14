@@ -33,6 +33,9 @@ public class PlantaService {
 	
 	public PlantaModel altera(Long id, PlantaModel planta) {
 		PlantaModel plantaModel = buscaId(id);
+		if ( plantaModel == null ) {
+			return null;
+		}
 		BeanUtils.copyProperties(planta, plantaModel, "id");
 		return grava(plantaModel);
 	}
