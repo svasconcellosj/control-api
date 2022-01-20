@@ -45,8 +45,8 @@ public class PlantaRepositoryImpl implements PlantaRepositoryQuery {
 		List<Predicate> predicates = new ArrayList<>();
 
 		//where descricao like '% campo %' 
-		if(!ObjectUtils.isEmpty(PlantaFilter.getDescricao())) {
-			predicates.add(builder.like(builder.lower(root.get("descricao")), "%" + PlantaFilter.getDescricao().toLowerCase() + "%"));
+		if(!ObjectUtils.isEmpty(PlantaFilter.getNome())) {
+			predicates.add(builder.like(builder.lower(root.get("nome")), "%" + PlantaFilter.getNome().toLowerCase() + "%"));
 		}
 		
 		return predicates.toArray(new Predicate[predicates.size()]);
