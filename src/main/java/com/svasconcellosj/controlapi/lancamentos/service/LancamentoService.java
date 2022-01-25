@@ -1,13 +1,14 @@
 package com.svasconcellosj.controlapi.lancamentos.service;
 
-import java.util.List;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.svasconcellosj.controlapi.lancamentos.model.LancamentoModel;
 import com.svasconcellosj.controlapi.lancamentos.repository.LancamentoRepository;
+import com.svasconcellosj.controlapi.lancamentos.repository.filter.LancamentoFilter;
 
 @Service
 public class LancamentoService {
@@ -15,8 +16,8 @@ public class LancamentoService {
 	@Autowired
 	private LancamentoRepository lancamentoRepository;
 	
-	public List<LancamentoModel> buscaTodos() {
-		return lancamentoRepository.findAll();
+	public Page<LancamentoModel> buscaTodos(LancamentoFilter lancamentoFilter, Pageable pageable) {
+		return lancamentoRepository.filtrar(lancamentoFilter, pageable);
 	}
 	
 	public LancamentoModel grava(LancamentoModel lancamento) {
