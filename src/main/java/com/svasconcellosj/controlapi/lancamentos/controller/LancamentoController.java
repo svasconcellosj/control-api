@@ -1,5 +1,8 @@
 package com.svasconcellosj.controlapi.lancamentos.controller;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoCategoriaEstatistica;
 import com.svasconcellosj.controlapi.lancamentos.model.LancamentoModel;
 import com.svasconcellosj.controlapi.lancamentos.repository.filter.LancamentoFilter;
 import com.svasconcellosj.controlapi.lancamentos.service.LancamentoService;
@@ -53,6 +57,13 @@ public class LancamentoController {
 	public ResponseEntity<LancamentoModel> alteraLancamento(@PathVariable Long id, @RequestBody LancamentoModel lancamento) {
 		LancamentoModel lancamentoModel = lancamentoService.altera(id, lancamento);
 		return new ResponseEntity<LancamentoModel>(lancamentoModel, HttpStatus.OK);		
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "estatisticas/por-categoria")
+	public ResponseEntity<List<LancamentoCategoriaEstatistica>> estatiscaPorCategoria() {
+		LocalDate data = LocalDate.now();
+		List<LancamentoCategoriaEstatistica> estatistica = lancamentoService.porCategoria(data);
+		return new ResponseEntity<List<LancamentoCategoriaEstatistica>>(estatistica, HttpStatus.OK);
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.svasconcellosj.controlapi.lancamentos.repository.consult;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.ObjectUtils;
 
+import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoCategoriaEstatistica;
 import com.svasconcellosj.controlapi.lancamentos.model.LancamentoModel;
 import com.svasconcellosj.controlapi.lancamentos.repository.filter.LancamentoFilter;
 import com.svasconcellosj.controlapi.lancamentos.repository.projection.ResumoLancamento;
@@ -101,6 +103,34 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 		
 		criteria.select(builder.count(root));
 		return manager.createQuery(criteria).getSingleResult();
+	}
+	
+	@Override
+	public List<LancamentoCategoriaEstatistica> porCategoria(LocalDate mesReferencia) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		//O que quer devolver
+		CriteriaQuery<LancamentoCategoriaEstatistica> criteria = builder.createQuery(LancamentoCategoriaEstatistica.class);
+		//Onde vai buscar os dados
+		Root<LancamentoModel> root = criteria.from(LancamentoModel.class);
+		
+		//SELECT categoria, sum(valor) FROM lancamentos
+		criteria.select(builder.construct(LancamentoCategoriaEstatistica.class, root.get("idCategoria"), builder.sum(root.get("valor"))));
+		
+		//WHERE dataPagamento >= primeiroDia AND davaPagamento <= ultimoDia
+		LocalDate primeiroDia = mesReferencia.withDayOfMonth(1);
+		LocalDate ultimoDia = mesReferencia.withDayOfMonth(mesReferencia.lengthOfMonth());
+		criteria.where(builder.greaterThanOrEqualTo(root.get("dataPagamento"), primeiroDia), builder.lessThanOrEqualTo(root.get("dataPagamento"), ultimoDia));
+		
+		//GROUP BY categoria
+		criteria.groupBy(root.get("idCategoria").get("descricao"));
+		
+		//ORDER BY categoria
+		criteria.orderBy( builder.asc(root.get("idCategoria").get("descricao")) );
+		
+		//Monta a consulta
+		TypedQuery<LancamentoCategoriaEstatistica> typedQuery = manager.createQuery(criteria);
+		
+		return typedQuery.getResultList();
 	}
 	
 }
