@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoCategoriaEstatistica;
+import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoTipoEstatistica;
 import com.svasconcellosj.controlapi.lancamentos.model.LancamentoModel;
 import com.svasconcellosj.controlapi.lancamentos.repository.LancamentoRepository;
 import com.svasconcellosj.controlapi.lancamentos.repository.filter.LancamentoFilter;
@@ -44,6 +45,10 @@ public class LancamentoService {
 	
 	public List<LancamentoCategoriaEstatistica> porCategoria(LocalDate mesReferencia) {
 		return lancamentoRepository.porCategoria(mesReferencia);
+	}
+	
+	public List<LancamentoTipoEstatistica> porTipo(LocalDate mesReferencia) {
+		return lancamentoRepository.porTipo(mesReferencia);
 	}
 	
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoCategoriaEstatistica;
+import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoTipoEstatistica;
 import com.svasconcellosj.controlapi.lancamentos.model.LancamentoModel;
 import com.svasconcellosj.controlapi.lancamentos.repository.filter.LancamentoFilter;
 import com.svasconcellosj.controlapi.lancamentos.service.LancamentoService;
@@ -64,6 +65,13 @@ public class LancamentoController {
 		LocalDate data = LocalDate.now();
 		List<LancamentoCategoriaEstatistica> estatistica = lancamentoService.porCategoria(data);
 		return new ResponseEntity<List<LancamentoCategoriaEstatistica>>(estatistica, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "estatisticas/por-tipo")
+	public ResponseEntity<List<LancamentoTipoEstatistica>> estatisticaPorTipo() {
+		LocalDate data = LocalDate.now();
+		List<LancamentoTipoEstatistica> estatistica = lancamentoService.porTipo(data);
+		return new ResponseEntity<List<LancamentoTipoEstatistica>>(estatistica, HttpStatus.OK);
 	}
 
 }
