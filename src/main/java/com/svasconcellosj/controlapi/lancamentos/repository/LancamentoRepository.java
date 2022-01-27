@@ -1,0 +1,17 @@
+package com.svasconcellosj.controlapi.lancamentos.repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.svasconcellosj.controlapi.lancamentos.model.LancamentoModel;
+import com.svasconcellosj.controlapi.lancamentos.repository.consult.LancamentoRepositoryQuery;
+
+@Repository
+public interface LancamentoRepository extends JpaRepository<LancamentoModel, Long>, LancamentoRepositoryQuery {
+	
+	public List<LancamentoModel> findByOrderByDescricao();
+	public List<LancamentoModel> findByOrderByTipoDescDescricaoAsc();
+
+}
