@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoCategoriaEstatistica;
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoTipoEstatistica;
 import com.svasconcellosj.controlapi.lancamentos.model.LancamentoModel;
-import com.svasconcellosj.controlapi.lancamentos.repository.filter.LancamentoFilter;
 import com.svasconcellosj.controlapi.lancamentos.service.LancamentoService;
 
 @RestController
@@ -28,10 +28,10 @@ public class LancamentoController {
 	
 	@Autowired
 	private LancamentoService lancamentoService;
-	
+
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<Page<LancamentoModel>> buscaLancamentos(LancamentoFilter lancamentoFilter, Pageable pageable) {
-		Page<LancamentoModel> lista = lancamentoService.buscaTodos(lancamentoFilter, pageable);
+	public ResponseEntity<Page<LancamentoModel>> buscaLancamentos(Pageable pageable) {
+		Page<LancamentoModel> lista = lancamentoService.buscaTodos(pageable);
 		return new ResponseEntity<Page<LancamentoModel>>(lista, HttpStatus.OK);
 	}
 	
@@ -72,6 +72,26 @@ public class LancamentoController {
 		LocalDate data = LocalDate.now();
 		List<LancamentoTipoEstatistica> estatistica = lancamentoService.porTipo(data);
 		return new ResponseEntity<List<LancamentoTipoEstatistica>>(estatistica, HttpStatus.OK);
+	}
+	
+	
+	//formas de ordenação
+	
+	@RequestMapping(method = RequestMethod.GET, value = "sortDescricao")
+	public ResponseEntity<List<LancamentoModel>> findByOrderByDescricao() {
+		List<LancamentoModel> lista = lancamentoService.findByOrderByDescricao();
+		return new ResponseEntity<List<LancamentoModel>>(lista, HttpStatus.OK);
+	}
+	@RequestMapping(method = RequestMethod.GET, value = "sort.Descricao")
+	public ResponseEntity<List<LancamentoModel>> findBySortDescricao() {
+		List<LancamentoModel> lista = lancamentoService.buscaTodos(Sort.by(Sort.Direction.ASC, "descricao"));
+		return new ResponseEntity<List<LancamentoModel>>(lista, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "sortTipoDescricao")
+	public ResponseEntity<List<LancamentoModel>> findByOrderByTipoDescDescricaoAsc() {
+		List<LancamentoModel> lista = lancamentoService.findByOrderByTipoDescDescricaoAsc();
+		return new ResponseEntity<List<LancamentoModel>>(lista, HttpStatus.OK);
 	}
 
 }
