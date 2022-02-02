@@ -1,11 +1,14 @@
 package com.svasconcellosj.controlapi.contas.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,15 +20,22 @@ import com.svasconcellosj.controlapi.contas.service.ContaService;
 
 @RestController
 @RequestMapping(value = "/contas")
+@CrossOrigin(maxAge = 10, origins = { "http://localhost:4200"} )
 public class ContaController {
 
 	@Autowired
 	private ContaService contaService;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<Page<ContaModel>> buscaContas(Pageable pageable) {
-		Page<ContaModel> lista = contaService.buscaTodos(pageable);
+	public ResponseEntity<Page<ContaModel>> pesquisaContas(Pageable pageable) {
+		Page<ContaModel> lista = contaService.pesquisa(pageable);
 		return new ResponseEntity<Page<ContaModel>>(lista, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/lista")
+	public ResponseEntity<List<ContaModel>> buscaContas() {
+		List<ContaModel> lista = contaService.buscaTodos();
+		return new ResponseEntity<List<ContaModel>>(lista, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)

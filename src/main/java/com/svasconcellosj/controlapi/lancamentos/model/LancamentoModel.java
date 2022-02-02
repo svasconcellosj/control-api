@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.svasconcellosj.controlapi.categorias.model.CategoriaModel;
+import com.svasconcellosj.controlapi.contas.model.ContaModel;
 
 import lombok.Data;
 
@@ -57,5 +58,14 @@ public class LancamentoModel {
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private TipoLancamento tipo;
+	
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name = "id_conta")
+	private ContaModel conta;
+	
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private MovimentoLancamento movimento;
 	
 }

@@ -1,5 +1,7 @@
 package com.svasconcellosj.controlapi.contas.service;
 
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,8 +17,12 @@ public class ContaService {
 	@Autowired
 	private ContaRepository contaRepository;
 	
-	public Page<ContaModel> buscaTodos(Pageable pageable) {
+	public Page<ContaModel> pesquisa(Pageable pageable) {
 		return contaRepository.findAll(pageable);
+	}
+	
+	public List<ContaModel> buscaTodos() {
+		return contaRepository.findAll();
 	}
 	
 	public ContaModel grava(ContaModel conta) {
