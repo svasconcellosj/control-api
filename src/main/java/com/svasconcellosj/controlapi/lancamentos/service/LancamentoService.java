@@ -7,7 +7,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoCategoriaEstatistica;
@@ -21,8 +20,9 @@ public class LancamentoService {
 	@Autowired
 	private LancamentoRepository lancamentoRepository;
 
-	public Page<LancamentoModel> buscaTodos(Pageable pageable) {
-		return lancamentoRepository.findAll(pageable);
+	
+	public Page<LancamentoModel> buscaTodos(String descricao, Pageable pageable) {
+		return lancamentoRepository.findByDescricaoLikeOrderByDescricao('%'+descricao+'%', pageable);
 	}
 	
 	public LancamentoModel grava(LancamentoModel lancamento) {
@@ -43,24 +43,15 @@ public class LancamentoService {
 		return grava(lancamentoModel);
 	}
 	
-	public List<LancamentoCategoriaEstatistica> porCategoria(LocalDate mesReferencia) {
-		return lancamentoRepository.porCategoria(mesReferencia);
+	public List<LancamentoCategoriaEstatistica> porCategoria(LocalDate dataInicio, LocalDate dataFim) {
+		return lancamentoRepository.porCategoria(dataInicio, dataFim);
+	}
+	public List<LancamentoCategoriaEstatistica> findByCategoriaGroupByCategoria(LocalDate dataInicio, LocalDate dataFim) {
+		return lancamentoRepository.findByCategoriaGroupByCategoria(dataInicio, dataFim);
 	}
 	
-	public List<LancamentoTipoEstatistica> porTipo(LocalDate mesReferencia) {
-		return lancamentoRepository.porTipo(mesReferencia);
-	}
-	
-	public List<LancamentoModel> findByOrderByDescricao() {
-		return lancamentoRepository.findByOrderByDescricao();
-	}
-	
-	public List<LancamentoModel> buscaTodos(Sort sort) {
-		return lancamentoRepository.findAll(sort);
-	}
-	
-	public List<LancamentoModel> findByOrderByTipoDescDescricaoAsc() {
-		return lancamentoRepository.findByOrderByTipoDescDescricaoAsc();
+	public List<LancamentoTipoEstatistica> findByTipoGroupByTipo(LocalDate data_inicio, LocalDate data_fim) {
+		return lancamentoRepository.findByTipoGroupByTipo(data_inicio,data_fim);
 	}
 	
 }

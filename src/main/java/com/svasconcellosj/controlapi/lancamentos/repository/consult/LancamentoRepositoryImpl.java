@@ -107,7 +107,7 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 	}
 	
 	@Override
-	public List<LancamentoCategoriaEstatistica> porCategoria(LocalDate mesReferencia) {
+	public List<LancamentoCategoriaEstatistica> porCategoria(LocalDate dataInicio, LocalDate dataFim) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 		//O que quer devolver
 		CriteriaQuery<LancamentoCategoriaEstatistica> criteria = builder.createQuery(LancamentoCategoriaEstatistica.class);
@@ -118,8 +118,8 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 		criteria.select(builder.construct(LancamentoCategoriaEstatistica.class, root.get("idCategoria"), builder.sum(root.get("valor"))));
 		
 		//WHERE dataPagamento >= primeiroDia AND davaPagamento <= ultimoDia
-		LocalDate primeiroDia = mesReferencia.withDayOfMonth(1);
-		LocalDate ultimoDia = mesReferencia.withDayOfMonth(mesReferencia.lengthOfMonth());
+		LocalDate primeiroDia = dataInicio.withDayOfMonth(1);
+		LocalDate ultimoDia = dataFim.withDayOfMonth(dataFim.lengthOfMonth());
 		criteria.where(builder.greaterThanOrEqualTo(root.get("dataPagamento"), primeiroDia), builder.lessThanOrEqualTo(root.get("dataPagamento"), ultimoDia));
 		
 		//GROUP BY categoria
