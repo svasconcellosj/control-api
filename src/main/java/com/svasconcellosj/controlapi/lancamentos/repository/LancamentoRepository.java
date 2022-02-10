@@ -21,7 +21,7 @@ public interface LancamentoRepository extends JpaRepository<LancamentoModel, Lon
 	public Page<LancamentoModel> findByDescricaoLikeOrderByDescricao(String descricao, Pageable pageable);
 	
 	@Query(value = "SELECT new com.svasconcellosj.controlapi.lancamentos.dto.LancamentoTipoEstatistica(l.tipo, SUM(l.valor)) "
-			+ "FROM LancamentoModel l WHERE l.dataPagamento >= :data_inicio AND l.dataPagamento < :data_fim GROUP BY l.tipo")
+			+ "FROM LancamentoModel l WHERE l.dataPagamento >= :data_inicio AND l.dataPagamento < :data_fim GROUP BY l.tipo ORDER BY l.tipo DESC")
 	public List<LancamentoTipoEstatistica> findByTipoGroupByTipo(@Param("data_inicio") LocalDate data_inicio, @Param("data_fim") LocalDate data_fim);
 	
 	@Query(value = "SELECT new com.svasconcellosj.controlapi.lancamentos.dto.LancamentoCategoriaEstatistica(l.idCategoria, SUM(l.valor)) "
