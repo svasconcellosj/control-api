@@ -40,8 +40,12 @@ public class LancamentoController {
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<LancamentoModel> gravaLancamento(@RequestBody LancamentoModel lancamento) {
-		LancamentoModel lancamentoModel = lancamentoService.grava(lancamento);
-		return new ResponseEntity<LancamentoModel>(lancamentoModel, HttpStatus.CREATED);
+		Boolean temSaldo = lancamentoService.temSaldo(lancamento.getConta().getId(),lancamento);
+		if ( temSaldo ) {
+			LancamentoModel lancamentoModel = lancamentoService.grava(lancamento);
+			return new ResponseEntity<LancamentoModel>(lancamentoModel, HttpStatus.CREATED);
+		} 
+		return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")

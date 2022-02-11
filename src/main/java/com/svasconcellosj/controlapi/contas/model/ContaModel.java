@@ -1,5 +1,7 @@
 package com.svasconcellosj.controlapi.contas.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,5 +24,8 @@ public class ContaModel {
 	@NotNull
 	@Size(min = 5, max = 30)
 	private String descricao;
+	
+	@NotNull
+	private BigDecimal saldo;
 
 }

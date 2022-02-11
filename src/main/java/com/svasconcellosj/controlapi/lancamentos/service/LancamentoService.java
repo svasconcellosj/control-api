@@ -1,5 +1,6 @@
 package com.svasconcellosj.controlapi.lancamentos.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.svasconcellosj.controlapi.contas.service.ContaService;
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoCategoriaEstatistica;
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoTipoEstatistica;
 import com.svasconcellosj.controlapi.lancamentos.model.LancamentoModel;
@@ -19,10 +21,13 @@ public class LancamentoService {
 
 	@Autowired
 	private LancamentoRepository lancamentoRepository;
+	
+	@Autowired
+	private ContaService contaService;
 
 	
 	public Page<LancamentoModel> buscaTodos(String descricao, Pageable pageable) {
-		return lancamentoRepository.findByDescricaoLikeOrderByDescricao('%'+descricao+'%', pageable);
+		return lancamentoRepository.findByDescricaoLikeOrderByDataPagamentoDescTipoDescDescricaoAsc('%'+descricao+'%', pageable);
 	}
 	
 	public LancamentoModel grava(LancamentoModel lancamento) {
@@ -52,6 +57,19 @@ public class LancamentoService {
 	
 	public List<LancamentoTipoEstatistica> findByTipoGroupByTipo(LocalDate data_inicio, LocalDate data_fim) {
 		return lancamentoRepository.findByTipoGroupByTipo(data_inicio,data_fim);
+	}
+	
+	public Boolean temSaldo(Long conta, LancamentoModel lancamento) {
+		Boolean status = true;
+		BigDecimal saldo = contaService.buscaId(conta).getSaldo();
+		BigDecimal valor = lancamento.getValor();
+		String tipo = lancamento.getTipo().toString();
+		if ( tipo == "DESPESA" ) {
+			if ( valor.compareTo(saldo) == 1) {
+				status = false;
+			}
+		}
+		return status;
 	}
 	
 }

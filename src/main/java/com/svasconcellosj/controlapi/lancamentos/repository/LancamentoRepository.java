@@ -18,7 +18,7 @@ import com.svasconcellosj.controlapi.lancamentos.repository.consult.LancamentoRe
 @Repository
 public interface LancamentoRepository extends JpaRepository<LancamentoModel, Long>, LancamentoRepositoryQuery {
 	
-	public Page<LancamentoModel> findByDescricaoLikeOrderByDescricao(String descricao, Pageable pageable);
+	public Page<LancamentoModel> findByDescricaoLikeOrderByDataPagamentoDescTipoDescDescricaoAsc(String descricao, Pageable pageable);
 	
 	@Query(value = "SELECT new com.svasconcellosj.controlapi.lancamentos.dto.LancamentoTipoEstatistica(l.tipo, SUM(l.valor)) "
 			+ "FROM LancamentoModel l WHERE l.dataPagamento >= :data_inicio AND l.dataPagamento < :data_fim GROUP BY l.tipo ORDER BY l.tipo DESC")
