@@ -61,13 +61,10 @@ public class LancamentoService {
 	
 	public Boolean temSaldo(Long conta, LancamentoModel lancamento) {
 		Boolean status = true;
-		BigDecimal saldo = contaService.buscaId(conta).getSaldo();
 		BigDecimal valor = lancamento.getValor();
 		String tipo = lancamento.getTipo().toString();
 		if ( tipo == "DESPESA" ) {
-			if ( valor.compareTo(saldo) == 1) {
-				status = false;
-			}
+			return contaService.temSaldo(conta, valor);
 		}
 		return status;
 	}

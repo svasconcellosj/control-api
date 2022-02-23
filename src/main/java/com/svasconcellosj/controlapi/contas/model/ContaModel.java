@@ -25,7 +25,6 @@ public class ContaModel {
 	@Size(min = 5, max = 30)
 	private String descricao;
 	
-	@NotNull
 	private BigDecimal saldo;
 
 }

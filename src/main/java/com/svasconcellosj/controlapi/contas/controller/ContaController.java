@@ -62,5 +62,5 @@ public class ContaController {
 		ContaModel contaModel = contaService.alterar(id, conta);
 		return new ResponseEntity<ContaModel>(contaModel, HttpStatus.OK);
 	}
-	
+
 }

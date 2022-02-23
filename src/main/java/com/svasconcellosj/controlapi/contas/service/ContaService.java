@@ -1,5 +1,6 @@
 package com.svasconcellosj.controlapi.contas.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -37,11 +38,28 @@ public class ContaService {
 		contaRepository.delete(conta);
 	}
 	
-	
 	public ContaModel alterar(Long id, ContaModel conta) {
 		ContaModel contaModel = buscaId(id);
 		BeanUtils.copyProperties(conta, contaModel,"id");
 		return grava(contaModel);
+	}
+	
+	public Boolean temSaldo(Long id, BigDecimal valor) {
+		Boolean status = true;
+		ContaModel contaModel = buscaId(id);
+		BigDecimal saldo = contaModel.getSaldo();
+		if ( valor.compareTo(saldo) == 1) {
+			status = false;
+		}
+		return status;
+	}
+	
+	public ContaModel movimentaSaldo(ContaModel conta, BigDecimal novoSaldo) {
+		ContaModel contaModel = buscaId(conta.getId());
+		contaModel.setSaldo(novoSaldo);
+		BeanUtils.copyProperties(conta, contaModel,"id");
+		return grava(contaModel);
+		
 	}
 	
 }
