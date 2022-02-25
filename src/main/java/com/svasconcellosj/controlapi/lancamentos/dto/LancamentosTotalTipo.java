@@ -2,8 +2,6 @@ package com.svasconcellosj.controlapi.lancamentos.dto;
 
 import java.math.BigDecimal;
 
-import com.svasconcellosj.controlapi.lancamentos.model.TipoLancamento;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,9 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class LancamentoTipoEstatistica {
+public class LancamentosTotalTipo {
 
-	private TipoLancamento tipo;
 	private BigDecimal total;
-
+	
 }

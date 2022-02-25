@@ -1,5 +1,6 @@
 package com.svasconcellosj.controlapi.lancamentos.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -7,11 +8,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.svasconcellosj.controlapi.contas.service.ContaService;
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoCategoriaEstatistica;
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoTipoEstatistica;
+import com.svasconcellosj.controlapi.lancamentos.dto.LancamentosTotalTipo;
 import com.svasconcellosj.controlapi.lancamentos.model.LancamentoModel;
 import com.svasconcellosj.controlapi.lancamentos.repository.LancamentoRepository;
 
@@ -20,9 +22,13 @@ public class LancamentoService {
 
 	@Autowired
 	private LancamentoRepository lancamentoRepository;
+	
+	@Autowired
+	private ContaService contaService;
 
-	public Page<LancamentoModel> buscaTodos(Pageable pageable) {
-		return lancamentoRepository.findAll(pageable);
+	
+	public Page<LancamentoModel> buscaTodos(String descricao, Pageable pageable) {
+		return lancamentoRepository.findByDescricaoLikeOrderByDataPagamentoDescTipoDescDescricaoAsc('%'+descricao+'%', pageable);
 	}
 	
 	public LancamentoModel grava(LancamentoModel lancamento) {
@@ -43,24 +49,33 @@ public class LancamentoService {
 		return grava(lancamentoModel);
 	}
 	
-	public List<LancamentoCategoriaEstatistica> porCategoria(LocalDate mesReferencia) {
-		return lancamentoRepository.porCategoria(mesReferencia);
+	public List<LancamentoCategoriaEstatistica> porCategoria(LocalDate dataInicio, LocalDate dataFim) {
+		return lancamentoRepository.porCategoria(dataInicio, dataFim);
+	}
+	public List<LancamentoCategoriaEstatistica> findByCategoriaGroupByCategoria(LocalDate dataInicio, LocalDate dataFim) {
+		return lancamentoRepository.findByCategoriaGroupByCategoria(dataInicio, dataFim);
 	}
 	
-	public List<LancamentoTipoEstatistica> porTipo(LocalDate mesReferencia) {
-		return lancamentoRepository.porTipo(mesReferencia);
+	public List<LancamentoTipoEstatistica> findByTipoGroupByTipo(LocalDate data_inicio, LocalDate data_fim) {
+		return lancamentoRepository.findByTipoGroupByTipo(data_inicio,data_fim);
 	}
 	
-	public List<LancamentoModel> findByOrderByDescricao() {
-		return lancamentoRepository.findByOrderByDescricao();
+	public Boolean temSaldo(Long conta, LancamentoModel lancamento) {
+		Boolean status = true;
+		BigDecimal valor = lancamento.getValor();
+		String tipo = lancamento.getTipo().toString();
+		if ( tipo == "DESPESA" ) {
+			return contaService.temSaldo(conta, valor);
+		}
+		return status;
 	}
 	
-	public List<LancamentoModel> buscaTodos(Sort sort) {
-		return lancamentoRepository.findAll(sort);
+	public LancamentosTotalTipo totalLancamentoReceitas(LocalDate data_inicio, LocalDate data_fim) {
+		return lancamentoRepository.findTotalLancamentoReceitas(data_inicio,data_fim);
 	}
 	
-	public List<LancamentoModel> findByOrderByTipoDescDescricaoAsc() {
-		return lancamentoRepository.findByOrderByTipoDescDescricaoAsc();
+	public LancamentosTotalTipo totalLancamentoDespesas(LocalDate data_inicio, LocalDate data_fim) {
+		return lancamentoRepository.findTotalLancamentoDespesas(data_inicio,data_fim);
 	}
 	
 }
