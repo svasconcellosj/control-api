@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.svasconcellosj.controlapi.contas.dto.ConsultaSaldos;
 import com.svasconcellosj.controlapi.contas.model.ContaModel;
 import com.svasconcellosj.controlapi.contas.service.ContaService;
 
@@ -61,6 +62,12 @@ public class ContaController {
 	public ResponseEntity<ContaModel> alteraConta(@PathVariable Long id, @RequestBody ContaModel conta) {
 		ContaModel contaModel = contaService.alterar(id, conta);
 		return new ResponseEntity<ContaModel>(contaModel, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/total-saldos")
+	public ResponseEntity<ConsultaSaldos> consultaSaldo() {
+		ConsultaSaldos saldo = contaService.buscaTotalSaldos();
+		return new ResponseEntity<ConsultaSaldos>(saldo, HttpStatus.OK);
 	}
 
 }

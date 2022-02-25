@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.svasconcellosj.controlapi.contas.service.ContaService;
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoCategoriaEstatistica;
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoTipoEstatistica;
+import com.svasconcellosj.controlapi.lancamentos.dto.LancamentosTotalTipo;
 import com.svasconcellosj.controlapi.lancamentos.model.LancamentoModel;
 import com.svasconcellosj.controlapi.lancamentos.repository.LancamentoRepository;
 
@@ -67,6 +68,14 @@ public class LancamentoService {
 			return contaService.temSaldo(conta, valor);
 		}
 		return status;
+	}
+	
+	public LancamentosTotalTipo totalLancamentoReceitas(LocalDate data_inicio, LocalDate data_fim) {
+		return lancamentoRepository.findTotalLancamentoReceitas(data_inicio,data_fim);
+	}
+	
+	public LancamentosTotalTipo totalLancamentoDespesas(LocalDate data_inicio, LocalDate data_fim) {
+		return lancamentoRepository.findTotalLancamentoDespesas(data_inicio,data_fim);
 	}
 	
 }

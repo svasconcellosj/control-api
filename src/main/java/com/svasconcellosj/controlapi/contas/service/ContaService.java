@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.svasconcellosj.controlapi.contas.dto.ConsultaSaldos;
 import com.svasconcellosj.controlapi.contas.model.ContaModel;
 import com.svasconcellosj.controlapi.contas.repository.ContaRepository;
 
@@ -52,6 +53,10 @@ public class ContaService {
 			status = false;
 		}
 		return status;
+	}
+	
+	public ConsultaSaldos buscaTotalSaldos() {
+		return contaRepository.findSumSaldo();
 	}
 	
 	public ContaModel movimentaSaldo(ContaModel conta, BigDecimal novoSaldo) {

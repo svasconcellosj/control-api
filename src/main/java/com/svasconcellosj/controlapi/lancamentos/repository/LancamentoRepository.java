@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoCategoriaEstatistica;
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoTipoEstatistica;
+import com.svasconcellosj.controlapi.lancamentos.dto.LancamentosTotalTipo;
 import com.svasconcellosj.controlapi.lancamentos.model.LancamentoModel;
 import com.svasconcellosj.controlapi.lancamentos.repository.consult.LancamentoRepositoryQuery;
 
@@ -27,5 +28,12 @@ public interface LancamentoRepository extends JpaRepository<LancamentoModel, Lon
 	@Query(value = "SELECT new com.svasconcellosj.controlapi.lancamentos.dto.LancamentoCategoriaEstatistica(l.idCategoria, SUM(l.valor)) "
 			+ "FROM LancamentoModel l WHERE l.dataPagamento >=:data_inicio AND l.dataPagamento < :data_fim AND l.tipo = 'DESPESA' GROUP BY l.idCategoria")
 	public List<LancamentoCategoriaEstatistica> findByCategoriaGroupByCategoria(@Param("data_inicio") LocalDate data_inicio, @Param("data_fim") LocalDate data_fim);
+	
+	@Query(value = "SELECT new com.svasconcellosj.controlapi.lancamentos.dto.LancamentosTotalTipo(SUM(l.valor)) FROM LancamentoModel l "
+			+ "WHERE l.dataPagamento >=:data_inicio AND l.dataPagamento < :data_fim AND l.tipo = 'RECEITA'")
+	public LancamentosTotalTipo findTotalLancamentoReceitas(@Param("data_inicio") LocalDate data_inicio, @Param("data_fim") LocalDate data_fim);
 
+	@Query(value = "SELECT new com.svasconcellosj.controlapi.lancamentos.dto.LancamentosTotalTipo(SUM(l.valor)) FROM LancamentoModel l "
+			+ "WHERE l.dataPagamento >=:data_inicio AND l.dataPagamento < :data_fim AND l.tipo = 'DESPESA'")
+	public LancamentosTotalTipo findTotalLancamentoDespesas(@Param("data_inicio") LocalDate data_inicio, @Param("data_fim") LocalDate data_fim);
 }
