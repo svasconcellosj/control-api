@@ -1,5 +1,7 @@
 package com.svasconcellosj.controlapi.categorias.service;
 
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,8 +19,12 @@ public class CategoriaService {
 	private CategoriaRepository categoriaRepository;
 	
 	
-	public Page<CategoriaModel> buscaTodos(CategoriaFilter categoriaFilter, Pageable pageable) {
+	public Page<CategoriaModel> buscaTodas(CategoriaFilter categoriaFilter, Pageable pageable) {
 		return categoriaRepository.filtrar(categoriaFilter, pageable);
+	}
+	
+	public  List<CategoriaModel> listaTodas() {
+		return categoriaRepository.findByOrderByDescricaoAsc();
 	}
 	
 	public CategoriaModel grava(CategoriaModel categoria) {

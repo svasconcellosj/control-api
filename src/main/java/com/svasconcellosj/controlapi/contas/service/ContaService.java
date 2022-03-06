@@ -24,7 +24,7 @@ public class ContaService {
 	}
 	
 	public List<ContaModel> buscaTodos() {
-		return contaRepository.findAll();
+		return contaRepository.findByOrderByDescricaoAsc();
 	}
 	
 	public ContaModel grava(ContaModel conta) {
