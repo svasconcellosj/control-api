@@ -1,5 +1,7 @@
 package com.svasconcellosj.controlapi.categorias.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +30,7 @@ public class CategoriaController {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<Page<CategoriaModel>> buscaCategorias(CategoriaFilter categoriaFilter, Pageable pageable) {
-		Page<CategoriaModel> cM = categoriaService.buscaTodos(categoriaFilter, pageable);
+		Page<CategoriaModel> cM = categoriaService.buscaTodas(categoriaFilter, pageable);
 		return new ResponseEntity<Page<CategoriaModel>>(cM, HttpStatus.OK);		
 	}
 
@@ -59,6 +61,12 @@ public class CategoriaController {
 		}
 		categoriaService.exclui(categoriaModel);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/lista")
+	public ResponseEntity<List<CategoriaModel>> listaCategorias() {
+		List<CategoriaModel> lista = categoriaService.listaTodas();
+		return new ResponseEntity<List<CategoriaModel>>(lista, HttpStatus.OK);
 	}
 
 }

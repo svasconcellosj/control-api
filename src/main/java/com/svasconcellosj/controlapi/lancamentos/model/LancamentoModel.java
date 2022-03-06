@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.svasconcellosj.controlapi.categorias.model.CategoriaModel;
+import com.svasconcellosj.controlapi.categorias.subcategorias.model.SubcategoriaModel;
 import com.svasconcellosj.controlapi.contas.model.ContaModel;
 
 import lombok.Data;
@@ -45,6 +46,11 @@ public class LancamentoModel {
 	@ManyToOne
 	@JoinColumn(name = "id_categoria")
 	private CategoriaModel idCategoria;
+	
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name = "id_subcategoria")
+	private SubcategoriaModel idSubcategoria;
 	
 	@NotNull
 	@Enumerated(EnumType.STRING)

@@ -2,12 +2,12 @@ package com.svasconcellosj.controlapi.lancamentos.model;
 
 public enum MovimentoLancamento {
 
-	RECEITAS("RECEITAS"),
-	INVESTIMENTOS("INVESTIMENTOS"),
-	FIXAS("FIXAS"),
-	VARIAVEIS("VARIÁVEIS"),
+	ADICIONAIS("ADICIONAIS"),
 	EXTRAS("EXTRAS"),
-	ADICIONAIS("ADICIONAIS");
+	FIXAS("FIXAS"),
+	INVESTIMENTOS("INVESTIMENTOS"),
+	RECEITAS("RECEITAS"),
+	VARIAVEIS("VARIÁVEIS");
 	
 	private final String descricao;
 
