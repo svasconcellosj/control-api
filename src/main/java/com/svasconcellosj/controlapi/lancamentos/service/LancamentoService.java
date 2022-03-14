@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.svasconcellosj.controlapi.contas.service.ContaService;
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoCategoriaEstatistica;
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoTipoEstatistica;
+import com.svasconcellosj.controlapi.lancamentos.dto.LancamentosTipoMovimentoDto;
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentosTotalTipo;
 import com.svasconcellosj.controlapi.lancamentos.model.LancamentoModel;
 import com.svasconcellosj.controlapi.lancamentos.repository.LancamentoRepository;
@@ -78,4 +79,11 @@ public class LancamentoService {
 		return lancamentoRepository.findTotalLancamentoDespesas(data_inicio,data_fim);
 	}
 	
+	public List<LancamentosTipoMovimentoDto> porTipoMovimento(LocalDate data_inicio, LocalDate data_fim) {
+		return lancamentoRepository.porTipoMovimento(data_inicio, data_fim);
+	}
+	
+//	public List<LancamentosTipoMovimentoDto> porTipoMovimentoOrderByMovimento(LocalDate data_inicio, LocalDate data_fim) {
+//		return lancamentoRepository.porTipoMovimentoOrderByMovimento(data_inicio, data_fim);
+//	}
 }

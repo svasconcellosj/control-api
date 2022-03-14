@@ -19,6 +19,7 @@ import org.springframework.util.ObjectUtils;
 
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoCategoriaEstatistica;
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoTipoEstatistica;
+import com.svasconcellosj.controlapi.lancamentos.dto.LancamentosTipoMovimentoDto;
 import com.svasconcellosj.controlapi.lancamentos.model.LancamentoModel;
 import com.svasconcellosj.controlapi.lancamentos.repository.filter.LancamentoFilter;
 import com.svasconcellosj.controlapi.lancamentos.repository.projection.ResumoLancamento;
@@ -160,4 +161,29 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 		return typedQuery.getResultList();
 	}
 	
+	@Override
+	public List<LancamentosTipoMovimentoDto> porTipoMovimento(LocalDate dataInicio, LocalDate dataFim) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<LancamentosTipoMovimentoDto> criteria = builder.createQuery(LancamentosTipoMovimentoDto.class);
+		Root<LancamentoModel> root = criteria.from(LancamentoModel.class);
+		
+		//SELECT movimento, sum(valor) FROM lancamentos
+		criteria.select(builder.construct(LancamentosTipoMovimentoDto.class, root.get("movimento"), builder.sum(root.get("valor"))));
+		
+		//WHERE dataPagamento >= primeiroDia AND davaPagamento <= ultimoDia
+		LocalDate primeiroDia = dataInicio.withDayOfMonth(1);
+		LocalDate ultimoDia = dataFim.withDayOfMonth(dataFim.lengthOfMonth());
+		criteria.where( builder.greaterThanOrEqualTo(root.get("dataPagamento"), primeiroDia), builder.lessThanOrEqualTo(root.get("dataPagamento"), ultimoDia) );
+		
+		//GROUP BY movimento
+		criteria.groupBy(root.get("movimento"));
+		
+		//ORDER BY categoria
+		criteria.orderBy( builder.asc(root.get("movimento")) );
+		
+		//Monta a consulta
+		TypedQuery<LancamentosTipoMovimentoDto> typedQuery = manager.createQuery(criteria);
+		
+		return typedQuery.getResultList();
+	}
 }

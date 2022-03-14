@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoCategoriaEstatistica;
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentoTipoEstatistica;
+import com.svasconcellosj.controlapi.lancamentos.dto.LancamentosTipoMovimentoDto;
 import com.svasconcellosj.controlapi.lancamentos.dto.LancamentosTotalTipo;
 import com.svasconcellosj.controlapi.lancamentos.model.LancamentoModel;
 import com.svasconcellosj.controlapi.lancamentos.service.LancamentoService;
@@ -99,5 +100,21 @@ public class LancamentoController {
 		LancamentosTotalTipo total = lancamentoService.totalLancamentoDespesas(dataInicial, dataFinal);
 		return new ResponseEntity<LancamentosTotalTipo>(total, HttpStatus.OK);
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "estatisticas/por-movimentos")
+	public ResponseEntity<List<LancamentosTipoMovimentoDto>> estatisticaPorTipoMovimento(@RequestParam(value = "dataInicio", required = false) String dataInicio, @RequestParam(value = "dataFim", required = false) String dataFim) {
+		LocalDate dataInicial = LocalDate.parse(dataInicio, formatoData);
+		LocalDate dataFinal = LocalDate.parse(dataFim, formatoData);
+		List<LancamentosTipoMovimentoDto> lista = lancamentoService.porTipoMovimento(dataInicial, dataFinal);
+		return new ResponseEntity<List<LancamentosTipoMovimentoDto>>(lista, HttpStatus.OK);
+	}
+	
+//	@RequestMapping(method = RequestMethod.GET, value = "estatisticas/por-tipo-movimentos")
+//	public ResponseEntity<List<LancamentosTipoMovimentoDto>> porTipoMovimentoOrderByMovimento(@RequestParam(value = "dataInicio", required = true) String dataInicio, @RequestParam(value = "dataFim", required = true) String dataFim) {
+//		LocalDate dataInicial = LocalDate.parse(dataInicio, formatoData);
+//		LocalDate dataFinal = LocalDate.parse(dataFim, formatoData);
+//		List<LancamentosTipoMovimentoDto> lista = lancamentoService.porTipoMovimentoOrderByMovimento(dataInicial, dataFinal);
+//		return new ResponseEntity<List<LancamentosTipoMovimentoDto>>(lista, HttpStatus.OK);
+//	}
 
 }
